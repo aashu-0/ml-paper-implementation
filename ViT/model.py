@@ -202,7 +202,7 @@ class ViT(nn.Module):
 
 #-----TRAINING------
 
-import get_data
+import custom_data
 import engine
 
 
@@ -211,7 +211,7 @@ import engine
 torch.manual_seed(132)
 torch.cuda.manual_seed(132)
 
-img_batch, label_batch = next(iter(get_data.train_loader))
+img_batch, label_batch = next(iter(custom_data.train_loader))
 # an img
 img, label = img_batch[0], label_batch[0]
 
@@ -230,8 +230,8 @@ optimizer = torch.optim.Adam(params = vit.parameters(),
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 results = engine.train(model=vit,
-                       train_dataloader= get_data.train_loader,
-                       test_dataloader=get_data.test_loader,
+                       train_dataloader= custom_data.train_loader,
+                       test_dataloader=custom_data.test_loader,
                        optimizer=optimizer,
                        loss_fn=loss_fn,
                        epochs=2,

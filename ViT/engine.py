@@ -59,7 +59,7 @@ def train(model,
          loss_fn,
          epochs,
          device):
-    results = {'train loss': [],
+    results = {'train_loss': [],
               'train_acc': [],
               'test_loss':[],
               'test_acc':[]}
