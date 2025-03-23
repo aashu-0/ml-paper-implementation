@@ -1,3 +1,9 @@
+"""
+Vision Transformer (ViT) implementation based on the paper:
+"An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale"
+https://arxiv.org/abs/2010.11929
+"""
+
 # imports
 import torch
 import torch.nn as nn
@@ -200,43 +206,25 @@ class ViT(nn.Module):
     
 
 
-#-----TRAINING------
+if __name__ == "__main__":
 
-import custom_data
-import engine
-
-
-# get an image from train_dataloder
-#set seed
-torch.manual_seed(132)
-torch.cuda.manual_seed(132)
-
-img_batch, label_batch = next(iter(custom_data.train_loader))
-# an img
-img, label = img_batch[0], label_batch[0]
-
-# add batch dim
-img = img.unsqueeze(0)
-
-# vit instance
-vit = ViT()
-
-loss_fn = torch.nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(params = vit.parameters(),
-                            lr=0.0003,
-                            betas = (0.9,0.99),
-                            weight_decay = 0.5)
-
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-results = engine.train(model=vit,
-                       train_dataloader= custom_data.train_loader,
-                       test_dataloader=custom_data.test_loader,
-                       optimizer=optimizer,
-                       loss_fn=loss_fn,
-                       epochs=2,
-                       device=device)
-
-# save model_dict
-torch.save(vit.state_dict(), 'vit_cifar10.pth')
-print('Mdel saved as vit_cifar10.pth')
+    batch_size = 4
+    img_size = 224
+    in_channels = 3
+    num_classes = 10
+    
+    x = torch.randn(batch_size, in_channels, img_size, img_size)
+    
+    model = ViT(img_size= img_size,
+            patch_size = 16,
+            in_channels = in_channels,
+            num_classes = num_classes,
+            )
+    
+    #forward pass
+    output = model(x)
+    
+    # Print output shape
+    print(f"Input shape: {x.shape}")
+    print(f"Output shape: {output.shape}")
+    print(f"Model parameters: {sum(p.numel() for p in model.parameters())}")
